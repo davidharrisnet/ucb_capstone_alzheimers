@@ -2,7 +2,7 @@
 U.C. Berkeley Engineering Data Science Project
 ## Protient predictors for developing Alzheimers
 
-[Jupyter Notebook ](notebook.ipynb)
+[Jupyter Notebook ](lipidomics_notebook.ipynb)
 
 
 
