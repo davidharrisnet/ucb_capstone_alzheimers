@@ -6,7 +6,7 @@ U.C. Berkeley Engineering Data Science Project
 
 
 
-## Introducion
+## Introduction
 The dataset for this study comes from the Kaggle [Plasma lipidomics in Alzheimer's disease](https://www.kaggle.com/datasets/fereshtehjozaghkar/plasma-lipidomics-in-alzheimers-disease). It has 212 rows of real patient data with demographic data and the key protiens 'CSF Amyloid (pg/mL)', and 'CSF Total tau (pg/mL)'	along with the predictive meature 'Progression to Alzheimer's Disease'. This dataset was chosen to test a claim by the [Mayo Clinic](https://newsnetwork.mayoclinic.org/discussion/mayo-clinic-scientists-create-tool-to-predict-alzheimers-risk-years-before-symptoms-begin/) that the presence of amyloid and tau in the brain is predictive of developing alzeimer's 'plaques' and 'tangles' in the future. If true, this is a promising develoment in combating Alzeimers by detecting the signs with a PET scan. 
 
 
@@ -66,3 +66,12 @@ Focusing on the Mayo Clinic's hypothesis, CSF Phosphorylated tau (pg/mL), CSF To
 **Conclusion:** Looking at the seven classifier pipelines, Gradient Boosting has the highest accuracy but Logistic Regression has the highest Areas Under the Curve and a higher Recall. For medical dianosis, false negatives are important so there are no missed diagnosises. Logistic Regression, then appears to be the best choice.  This is advantageous as Logitic Regression is very interpretable, and is  more efficient algorithm than Gradient Boosting. 
 
 Also of note, it appears the model choice matters far less than feature choice did. Going from single-feature amyloid (UAC 0.75 )and single-feature tau (0.72) to combined amyloid+tau (0.80) was a much bigger jump than switching from Logistic Regression. It is reassuring that the biology is doing more work than the algorithm.
+
+
+# Two other studies
+1. disease_dataset 
+2. predicion_dataset
+
+* Both show Age a strong correlation
+* Biology is strong
+* Lifestyle not indicative here.
