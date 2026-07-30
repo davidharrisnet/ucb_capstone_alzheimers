@@ -2,7 +2,7 @@
 U.C. Berkeley Engineering Data Science Project
 ## Protient predictors for developing Alzheimers
 
-[Jupyter Notebook ](lipidomics_notebook.ipynb)
+[Jupyter Notebook  Lipidomics](lipidomics_notebook.ipynb)
 
 
 
@@ -69,9 +69,50 @@ Also of note, it appears the model choice matters far less than feature choice d
 
 
 # Two other studies
-1. disease_dataset 
-2. predicion_dataset
+## Prediction DataSet
+[Jupyter Notebook  Predition Dataset](alzheimers_prediction_dataset.ipynb)
 
-* Both show Age a strong correlation
-* Biology is strong
-* Lifestyle not indicative here.
+Strong correlations are attributed to 
+* 'Family History of Alzheimer’s'
+* 'Genetic Risk Factor (APOE-ε4 allele)',
+* 'Country', 
+* 'Age'
+
+Age                                     0.731058
+Genetic Risk Factor (APOE-ε4 allele)    0.139812
+Family History of Alzheimer’s           0.073677
+Country_Russia                          0.008558
+Country_India                           0.007400
+Country_Brazil                          0.006728
+Country_South Africa                    0.005937
+Country_Mexico                          0.005223
+Country_Japan                           0.003422
+Country_Sweden                          0.002977
+BMI                                     0.002785
+Country_Norway                          0.002234
+Country_Canada                          0.002218
+Cognitive Test Score                    0.002100
+Education Level                         0.000945
+
+All other attributes have little value 
+
+              
+# Alzheimer's Disease Data
+[Jupyter Notebook  Disease Data](alzheimers_disease_data.ipynb)
+
+ADL                         0.270638
+FunctionalAssessment        0.268798
+MemoryComplaints            0.187643
+BehavioralProblems          0.106007
+CholesterolTriglycerides    0.019872
+DietQuality                 0.019134
+BMI                         0.018398
+AlcoholConsumption          0.015098
+CholesterolTotal            0.014029
+SleepQuality                0.012943
+CholesterolLDL              0.012630
+PhysicalActivity            0.011779
+CholesterolHDL              0.009179
+SystolicBP                  0.008974
+DiastolicBP                 0.008692
+## 
