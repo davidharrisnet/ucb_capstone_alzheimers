@@ -77,7 +77,7 @@ Strong correlations are attributed to
 * 'Genetic Risk Factor (APOE-ε4 allele)',
 * 'Country', 
 * 'Age'
-
+```
 Age                                     0.731058
 Genetic Risk Factor (APOE-ε4 allele)    0.139812
 Family History of Alzheimer’s           0.073677
@@ -93,13 +93,13 @@ Country_Norway                          0.002234
 Country_Canada                          0.002218
 Cognitive Test Score                    0.002100
 Education Level                         0.000945
-
+```
 All other attributes have little value 
 
               
 # Alzheimer's Disease Data
 [Jupyter Notebook  Disease Data](alzheimers_disease_data.ipynb)
-
+```
 ADL                         0.270638
 FunctionalAssessment        0.268798
 MemoryComplaints            0.187643
@@ -115,4 +115,10 @@ PhysicalActivity            0.011779
 CholesterolHDL              0.009179
 SystolicBP                  0.008974
 DiastolicBP                 0.008692
-## 
+```
+
+1. I feel like all I am doing with these studies is assess correlarion values.
+2. Alzheimer's Diseasse Data is Synthetic so has little real value
+3. Prediction Data reinforces Age and Protein/Genetics
+   * Country is interesting
+4. There are several MRI dataset, but we did not cover image in the class, and I'm not sure what this will prove.
