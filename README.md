@@ -23,5 +23,8 @@ The outline folows the steps of the CRISP-DM methodology, and contains the follo
 7. Conclusion
 
 
+# Summary
+
+
    
 
