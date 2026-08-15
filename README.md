@@ -235,6 +235,57 @@ The classification algorithms with default parameters are evaluteed
 | K-Nearest Neighbors | 0.754 | 0.708 | 0.723 | 0.723 |     
 
 ### Classificaiton with hyper parameters
-Each classificaion algorithm was investigated.
+Each classificaion algorithm was investigated and hyper parameters were adjusted
+**Explain each one and why they wer applied.**
 
+ Logistic Regression
+ ```
+ Pipeline([('sc', StandardScaler()), ('clf', LogisticRegression(max_iter=1000,C=0.01))]),
+ ```
+Random Forest    
+```
+    RandomForestClassifier(n_estimators=300, random_state=42, max_depth=2), # max_depth=2
+```
+SVM (RBF) 
+```           
+Pipeline([('sc', StandardScaler()), ('clf', SVC(C=0.1, gamma=0.01, probability=True, random_state=42))]),
+```
+Gradient Boosting
+
+```
+GradientBoostingClassifier(random_state=42,max_depth=2, learning_rate=0.05, n_estimators=200),
+```
+
+K-Nearest Neighbors 
+```
+Pipeline([('sc', StandardScaler()), ('clf', KNeighborsClassifier(n_neighbors=7))]), #n_neighbors=7
+```
+
+
+LDA
+
+```
+Pipeline([('sc', StandardScaler()), ('clf', LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto'))]),
+```
+#### Results
+Remarkably, Gradient Boosting, and Random Forest now outperfor Logistic Regression with hyper parameters. This is not what I expected!
+
+| Model | AUC | Accuracy | Precision | Recall |
+|---|---|---|---|---|
+| Gradient Boosting | 0.825 | 0.742 | 0.786 | 0.702 |
+| Random Forest | 0.810 | 0.753 | 0.778 | 0.745 |
+| Logistic Regression | 0.805 | 0.663 | 0.631 | 0.872 |
+| LDA | 0.802 | 0.730 | 0.735 | 0.766 |
+| Naive Bayes | 0.799 | 0.742 | 0.750 | 0.766 |
+| SVM (RBF) | 0.794 | 0.528 | 0.528 | 1.000 |
+| KNN | 0.774 | 0.716 | 0.729 | 0.745 |
+
+A detailed analysis of the results show some things to consider.
+* Logistic Regression with hyper parameters did worse. ( look at this again. )
+* Gradient Boosting and Random Forest have higher false negatives
+* 
+
+## False Negatives
+In medical analysis false negtives are really bad. We are predicting someone will not progress to alzhiemers and therefore not be treated.  This brings up a lot of ethical considerations. How expensive is preventative treatment for alzhiemers? Could we just treat everyone? At any rate lets look at one means of affecting the false negative rate. (one that I understand)
+### Logistic Regression thresholds.
 
