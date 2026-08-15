@@ -16,9 +16,7 @@ The outline folows the steps of the CRISP-DM methodology, and contains the follo
 3. Validated amyloid and tau are the best predicitive parameters of the dataset with Logistic Regression
 4. Determine the best classification algorithm 'Logistic Regression','Random Forest', 'SVM (RBF)','Gradient Boosting','K-Nearest Neighbors','LDA''Naive Bayes'
 5. Investigate Hyper Parameters ([hyperparamemter notebook](hyperparameters.ipynb)]
-    * KNN - n_neighbors (K-nearest neibhbors)
-    * Random Forest - max_depth
-    * SVM  - C x gamma
+   
 6. Minimizing False Negatives
 7. Conclusion
 
