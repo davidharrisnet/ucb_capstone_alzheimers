@@ -5,7 +5,7 @@ U.C. Berkeley Engineering
 ## Protien predictors for developing Alzheimers
 
 
-### Synopsis 
+### Abstract 
 The potential of developing of Alzheimer's disease can be predicted by two key proteins in the brain - amyloid and tau. 
 [[Mayo Clinic]](https://newsnetwork.mayoclinic.org/discussion/mayo-clinic-scientists-create-tool-to-predict-alzheimers-risk-years-before-symptoms-begin/)
 This report uses the Kaggle dataset [Plasma lipidomics in Alzheimer's disease](https://www.kaggle.com/datasets/fereshtehjozaghkar/plasma-lipidomics-in-alzheimers-disease), which contains critical Tau and Amyloid measures of 212 real patient data to predict 'Progression to Alzheimer's Disease'.
@@ -13,43 +13,25 @@ This report uses the Kaggle dataset [Plasma lipidomics in Alzheimer's disease](h
 The detailed analysis for this project is contained in the jupyter notebook [Jupyter Notebook  Lipidomics](lipidomics_notebook.ipynb).
 This report folows the steps of the CRISP-DM methodology, and contains the following sections:
 
-1. Introduction
-2. Business Understanding
-3. Data Analysis
+
+1. Business Understanding
+3. Data Understanding
 4. Data Preparation
 5. Modeling
 
     1. Validating the most predicitive parameters of "Progression to Alzheimer's"
     2. Determine the best classification algorithm
-    3.  Investigate Hyper Parameters 
+    3. Investigate Hyper Parameters 
     4. Minimizing False Negatives
+6. Evaluation
 8. Conclusion
+9. References
 
 
 # Introduction
-#### Data Card
-
-##### About Datset
-
-Alzheimer's disease (AD) is a progressive neurodegenerative disorder that affects humans. It is typically characterized by cognitive impairment, which affects speech, behavior, and visual orientation. As cognitive capabilities decline, daily activities become more challenging, disabilities are experienced, and death occurs. Alzheimer's disease (AD) is strongly associated with abnormal lipid metabolism.
-This dataset contains 213 plasma samples, including 20 controls, 89 samples from individuals with mild cognitive impairment, and 104 samples from individuals with Alzheimer's disease. Furthermore, the dataset includes information on age, sex, cognitive evaluation results, and cerebrospinal fluid biomarkers indicative of Alzheimer's disease.
-
-**Authors**
-Gerard Piñol-Ripoll, Farida Dakterzada, Joaquim Sol, Mariona Jové, Reinald Pamplona
-
-**- Creative Commons License of the dataset:**
-Attribution-NonCommercial-NoDerivatives (BY-NC-ND)
-
-**- Dataset Digital Object Identifier (DOI):**
-https://doi.org/10.34810/data614
-
-**- Publications related to the dataset:**
-Dakterzada, F., Jové, M., Huerto, R., Carnes, A., Sol, J., Pamplona, R., & Piñol-Ripoll, G. (2023). Changes in Plasma Neutral and Ether-Linked Lipids Are Associated with The Pathology and Progression of Alzheimer’s Disease. Aging and Disease, 14(5), 1728.
 
 
-   
-# Data Analysis
-## Business Understanding
+# Business Understanding
 ### Clinical Background
 
 [Mayo Clinic](https://newsnetwork.mayoclinic.org/discussion/mayo-clinic-scientists-create-tool-to-predict-alzheimers-risk-years-before-symptoms-begin/)
@@ -63,12 +45,12 @@ Clifford Jack, Jr., M.D.
 
 The new prediction model combined several factors, including age, sex, genetic risk as associated with APOE genotype and brain amyloid levels detected on PET scans. Using the data, researchers can calculate an individual's likelihood of developing MCI or dementia within 10 years or over the predicted lifetime. Of all the predictors evaluated, the brain amyloid levels detected on PET scans was the predictor with the largest effect for lifetime risk of both MCI and dementia.
 
-### Data Analysis
+# Data Understanding
 
 * Image of "Diagnostic" bar chart.
 * Image of "Mild Cognitive Impariment" bar chart
 
-Some "Mild Cognitive Impairment" had Nan values which were filled with the mode value.
+
 
 Investigation into the dataset revle"Mild Cognitive Imparment" where 47 progress to alzhiemer's and 42 do not. 
 
@@ -76,34 +58,31 @@ Concerns this is a small dataset
 
 It is relatively well balanced, but given the small size its still something to consider. 
 
+Perhaps you should preemptively balance the set of Yes/No, but randomly selecting 42 Yeses?
+
 * Image of the scatter plot of Progress to Alzheimers for CSF Amalyoid and CSF Phosphorylated tau.
-
+ Using Logistic Regression, evaluate the power of the pvalue of each parameter
+```
+Feature(s)   AUC  p-value Significant (p<0.05)
+                Age 0.550   0.3656                   No
+                Sex 0.524   0.5195                   No
+               MMSE 0.640   0.0360                  Yes
+              APOE4 0.727   0.0010                  Yes
+        CSF Amyloid 0.782   0.0010                  Yes
+      CSF Total tau 0.728   0.0010                  Yes
+Amyloid + Total tau 0.810   0.0010                  Yes
+```
 # Data Preparation
-# Modeling
-1. Using Logistic Regression, evaluate the power of the pvalue of each parameter
-```
-Feature(s)   AUC  p-value Significant (p<0.05)
-                Age 0.550   0.3656                   No
-                Sex 0.524   0.5195                   No
-               MMSE 0.640   0.0360                  Yes
-              APOE4 0.727   0.0010                  Yes
-        CSF Amyloid 0.782   0.0010                  Yes
-      CSF Total tau 0.728   0.0010                  Yes
-Amyloid + Total tau 0.810   0.0010                  Yes
-```
-2. Systematiclly evaluate MMSE, APOE, and combinations of Amyloid and Tau to see which are the most predicative of Progression to Alzheiemrs. 
 
+Some "Mild Cognitive Impairment" had Nan values which were filled with the mode value.
+
+# Modeling
+
+1. Using Logistical Regression, evaluate MMSE, APOE, and combinations of Amyloid and Tau to see which are the most predicative of Progression to Alzheiemrs. 
+
+* MMSE
 * APOE4
-```
-Feature(s)   AUC  p-value Significant (p<0.05)
-                Age 0.550   0.3656                   No
-                Sex 0.524   0.5195                   No
-               MMSE 0.640   0.0360                  Yes
-              APOE4 0.727   0.0010                  Yes
-        CSF Amyloid 0.782   0.0010                  Yes
-      CSF Total tau 0.728   0.0010                  Yes
-Amyloid + Total tau 0.810   0.0010                  Yes
-```
+
 * CSF Amyloid
 ```
 
@@ -116,8 +95,7 @@ No progression      0.758     0.595     0.667        42
     Progressed      0.696     0.830     0.757        47
 
       accuracy                          0.719        89
-     macro avg      0.727     0.713     0.712        89
-  weighted avg      0.725     0.719     0.715        89
+    
 
 Accuracy: 0.7191011235955056
 AUC: 0.7510131712259374
@@ -136,9 +114,7 @@ No progression      0.673     0.786     0.725        42
     Progressed      0.775     0.660     0.713        47
 
       accuracy                          0.719        89
-     macro avg      0.724     0.723     0.719        89
-  weighted avg      0.727     0.719     0.719        89
-
+    
 Accuracy: 0.7191011235955056
 AUC: 0.7272036474164133
 
@@ -153,9 +129,7 @@ No progression      0.639     0.548     0.590        42
     Progressed      0.642     0.723     0.680        47
 
       accuracy                          0.640        89
-     macro avg      0.640     0.636     0.635        89
-  weighted avg      0.640     0.640     0.637        89
-
+    
 Accuracy: 0.6404494382022472
 AUC: 0.7155521783181358
 
@@ -171,8 +145,7 @@ No progression      0.673     0.786     0.725        42
     Progressed      0.775     0.660     0.713        47
 
       accuracy                          0.719        89
-     macro avg      0.724     0.723     0.719        89
-  weighted avg      0.727     0.719     0.719        89
+   
 
 Accuracy: 0.7191011235955056
 AUC: 0.7206180344478218
@@ -191,14 +164,12 @@ No progression      0.725     0.690     0.707        42
     Progressed      0.735     0.766     0.750        47
 
       accuracy                          0.730        89
-     macro avg      0.730     0.728     0.729        89
-  weighted avg      0.730     0.730     0.730        89
-
+   
 Accuracy: 0.7303370786516854
 AUC: 0.8011651469098278
 
 ```
-### Conclusion
+### Evaluation
 
 * CSF Phosphorylated tau (pg/mL) is just above random, CSF Total tau (pg/mL) alone is better
 * Amyloid and Total Tau are the strongest Accuracy and AUC. 
@@ -210,12 +181,7 @@ AUC: 0.8011651469098278
 Given the choice to use Total tau, and Amyloid, what is the best classification algorithm.
 ### Classification with default parameters.
 The classification algorithms with default parameters are evaluteed
-    'Logistic Regression':
-    'Random Forest':        
-    'SVM (RBF)':         
-    'Gradient Boosting':   
-    'K-Nearest Neighbors':  
-    'LDA':   
+      
 
   | Model | AUC | Accuracy | Precision | Recall |
 |---|---|---|---|---|
@@ -273,6 +239,7 @@ Remarkably, Gradient Boosting, and Random Forest now outperfor Logistic Regressi
 | SVM (RBF) | 0.794 | 0.528 | 0.528 | 1.000 |
 | KNN | 0.774 | 0.716 | 0.729 | 0.745 |
 
+## Evaluation
 A detailed analysis of the results show some things to consider.
 * Logistic Regression with hyper parameters did worse. ( look at this again. )
 * Gradient Boosting and Random Forest have higher false negatives
