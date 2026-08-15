@@ -1,4 +1,3 @@
-# Note this is is active development, and will stabalize by 9 AM August 15th.
 
 # UCB Capstone Project 
 U.C. Berkeley Engineering 
@@ -52,13 +51,12 @@ The new prediction model combined several factors, including age, sex, genetic r
 
 
 
-Investigation into the dataset revle"Mild Cognitive Imparment" where 47 progress to alzhiemer's and 42 do not. 
+Investigation into the dataset "Mild Cognitive Imparment" where 47 progress to alzhiemer's and 42 do not. 
 
 Concerns this is a small dataset
 
-It is relatively well balanced, but given the small size its still something to consider. 
+It is relatively well balanced. 53% Yes 47% No. This study will not balance the ratio. 
 
-Perhaps you should preemptively balance the set of Yes/No, but randomly selecting 42 Yeses?
 
 * Image of the scatter plot of Progress to Alzheimers for CSF Amalyoid and CSF Phosphorylated tau.
  Using Logistic Regression, evaluate the power of the pvalue of each parameter
