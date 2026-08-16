@@ -46,20 +46,27 @@ The new prediction model combined several factors, including age, sex, genetic r
 
 # Data Understanding
 
-* Image of "Diagnostic" bar chart.
-* Image of "Mild Cognitive Impariment" bar chart
+The dataset contains 212 patients across three diagnostic categories:
 
+![Diagnostic counts](images/Diagnostic.png)
 
+Of these, only the 89 patients already diagnosed with Mild Cognitive Impairment have a known "Progression to Alzheimer's Disease" outcome — the question this project answers only applies to that subset. 47 progress to Alzheimer's, 42 do not:
 
-Investigation into the dataset "Mild Cognitive Imparment" where 47 progress to alzhiemer's and 42 do not. 
+![Mild Cognitive Impairment progression counts](images/Mild_Cognitive_Impairment_.png)
 
-Concerns this is a small dataset
+**Concerns**: 89 labeled patients is a small dataset. Small samples are sensitive to exactly which patients land in a given train/test split or cross-validation fold, so results should be read as suggestive rather than definitive.
 
-It is relatively well balanced. 53% Yes 47% No. This study will not balance the ratio. 
+**Class balance**: at 53% Yes / 47% No, the MCI subset is close enough to balanced that this study does not apply any class-balancing technique (e.g. oversampling, class weighting) to the training data.
 
+### Setting expectations for the biology
 
-* Image of the scatter plot of Progress to Alzheimers for CSF Amalyoid and CSF Phosphorylated tau.
- Using Logistic Regression, evaluate the power of the pvalue of each parameter
+Before any modeling, it's worth checking visually whether the two biomarkers the [Mayo Clinic](https://newsnetwork.mayoclinic.org/discussion/mayo-clinic-scientists-create-tool-to-predict-alzheimers-risk-years-before-symptoms-begin/) hypothesis points to — CSF amyloid and CSF phosphorylated tau — actually separate progressors from non-progressors in this dataset, and in the expected direction (low amyloid, high tau → higher risk):
+
+![Decision boundary between progression and no progression, tau vs. amyloid](images/decision_boundary.png)
+
+Fitting a single logistic regression directly on these two raw biomarkers (no scaling, no other features) draws a boundary that slopes the way the biology predicts: patients with high tau need correspondingly high amyloid to land on the "no progression" side, while low tau alone is largely protective regardless of amyloid level. The two classes overlap substantially rather than separating cleanly — expected, given how small and noisy this dataset is — but the overall lean of the boundary matches the clinical hypothesis this project is testing, which is a reasonable sanity check before building anything more sophisticated.
+
+Using Logistic Regression, evaluate the power of the p-value of each parameter:
 ```
 Feature(s)   AUC  p-value Significant (p<0.05)
                 Age 0.550   0.3656                   No
