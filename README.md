@@ -5,16 +5,55 @@ U.C. Berkeley Engineering
 
 ### Abstract
 
-Alzheimer's disease isn't a niche concern — it's an epidemic, and it gets worse every year as the population ages. [Mayo Clinic](https://newsnetwork.mayoclinic.org/discussion/mayo-clinic-scientists-create-tool-to-predict-alzheimers-risk-years-before-symptoms-begin/) researchers have shown that two proteins in spinal fluid — amyloid and tau — can point toward who is at risk of developing Alzheimer's, years before symptoms appear. This project asks a narrower, testable version of that question: **among patients already diagnosed with Mild Cognitive Impairment (MCI), can we predict who will progress to Alzheimer's, using blood/CSF protein levels alone?**
+"An estimated 7.2 million Americans age 65 and older live with Alzheimer's dementia today. This number could grow to 13.8 million by 2060, barring the development of medical breakthroughs to prevent or cure AD"[1]. "There are over 55 million people worldwide living with dementia in 2020. This number will almost double every 20 years, reaching 78 million in 2030 and 139 million in 2050.[2] "Accumulation of the protein beta‐amyloid outside neurons and twisted strands of the protein tau inside neurons are hallmarks. They are accompanied by the death of neurons and damage to brain tissue. Inflammation and atrophy of brain tissue are other changes."[3] 
+[Mayo Clinic](https://newsnetwork.mayoclinic.org/discussion/mayo-clinic-scientists-create-tool-to-predict-alzheimers-risk-years-before-symptoms-begin/) researchers have shown that two proteins in spinal fluid — amyloid and tau — can point toward who is at risk of developing Alzheimer's, years before symptoms appear.[4] 
 
-Real clinical data for a question like this is protected, for good reason. Instead, this project uses the Kaggle dataset [Plasma lipidomics in Alzheimer's disease](https://www.kaggle.com/datasets/fereshtehjozaghkar/plasma-lipidomics-in-alzheimers-disease) — real (not synthetic) patient measurements for 212 people, of whom 89 have a known MCI-to-Alzheimer's outcome. That's a genuinely small dataset for an epidemic-scale question, and that mismatch shapes nearly every decision in this project: every choice below leans toward caution rather than an impressive-looking headline number.
+This project asks the question: **Among patients with with Mild Cognitive Impairment (MCI), can we predict who will progress to Alzheimer's, using Tau and Amyloid blood/CSF protein levels?**
 
-Two independent modeling approaches were built and are compared throughout this report:
 
-- **[`logistic_regression_pipeline.ipynb`](logistic_regression_pipeline.ipynb)** — an exhaustive search over which biomarkers matter, landing on a simple, 2-feature Logistic Regression model.
-- **[`svm_pipeline.ipynb`](svm_pipeline.ipynb)** — a broader comparison using all 7 available features, landing on a Support Vector Machine.
+This project uses the Kaggle dataset [Plasma lipidomics in Alzheimer's disease](https://www.kaggle.com/datasets/fereshtehjozaghkar/plasma-lipidomics-in-alzheimers-disease) — real patient measurements for 212 people, of whom 89 have a known MCI-to-Alzheimer's outcome. That is a small dataset for an epidemic-scale question, and that mismatch means that the decisions in this project were made with caution.
 
-Both are deployed and combined into an ensemble in **[`main.ipynb`](main.ipynb)**, the project's main notebook. The full personal narrative behind the modeling decisions — including the reasoning and dead ends not shown here — is in [`NARRATIVE.md`](NARRATIVE.md).
+#### The Accuracy Trap
+
+In a clinical setting, accuracy comes with risk. A model can post a high accuracy number while failing to identity patients who progress to alzhiemers - the False Negative diagnosis.
+Acuracy must be balanced with precision, recall, F2, and AUC. 
+
+Precision answers: of everyone the model flagged as "will progress to AD," how many actually did?
+
+$$\text{precision} = \frac{\text{true positives}}{\text{true positives} + \text{false positives}} = \frac{\text{correct positive predictions}}{\text{all positive predictions}}$$
+
+Recall answers: of everyone who actually progressed to Alzheimer's, how many did the model catch?
+
+$$\text{recall} = \frac{\text{true positives}}{\text{true positives} + \text{false negatives}} = \frac{\text{correct positive predictions}}{\text{all actual positives}}$$
+
+
+F2 answers: weighing precision and recall together, but caring more about recall — how well did the model do overall?
+
+$$F_2 = 5 \times \frac{\text{precision} \times \text{recall}}{4 \times \text{precision} + \text{recall}}$$
+
+This is the score actually used to pick hyperparameters throughout this project, instead of accuracy — the 5/4 weighting bakes the clinical priority ("don't miss progressors") directly into the number. Sweeping every possible decision threshold shows the full precision/recall trade-off F2 is trying to summarize in one number:
+
+<img src="images/ensemble_precision_recall.png" alt="Ensemble precision-recall curve" width="480">
+
+AUC (area under the ROC curve) answers: how well can the model tell a progressor from a non-progressor, before you even pick a decision cutoff?
+
+$$\text{AUC} \in [0.5,\ 1.0]$$
+
+0.5 is a coin flip; 1.0 is perfect separation. Unlike the other three metrics, AUC doesn't depend on where the "will progress / won't progress" line gets drawn — it's a check on whether the underlying signal is real at all, before accuracy, precision, or recall (which all depend on that threshold) enter the conversation:
+
+<img src="images/ensemble_roc.png" alt="Ensemble ROC curve" width="480">
+
+No single metric tells the whole story on its own; accuracy alone hides exactly the failure mode that matters most here.
+
+#### Two approaches
+Given the sensitiviy to false negatives, two approaches were taken
+
+
+- **[`false_negative_rate.ipynb`](false_negative_rate.ipynb)** — an exhaustive search over which biomarkers matter, landing on a simple, 2-feature Logistic Regression model.
+
+- **[`svm_pipeline.ipynb`](svm_pipeline.ipynb)** — a broader comparison using all 7 available features, landing on Support Vector Machine.
+
+Both are deployed and combined into an ensemble in **[`main.ipynb`](main.ipynb)**, the project's main notebook. 
 
 This report follows the CRISP-DM methodology:
 
@@ -46,7 +85,7 @@ The Mayo Clinic's own prediction model combined age, sex, APOE genotype, and bra
 
 The dataset contains 212 patients across three diagnostic categories:
 
-![Diagnostic counts](images/Diagnostic.png)
+![Diagnostic counts](images/Diagnostic.png width="500")
 
 Only the 89 patients already diagnosed with Mild Cognitive Impairment have a known "Progression to Alzheimer's Disease" outcome — nobody who is already healthy or already has an AD diagnosis has a progression label, because the question doesn't apply to them. So the real question this project answers is narrower than "who gets Alzheimer's": **of patients already showing MCI, who is going to get worse?** 47 of the 89 progress to Alzheimer's, 42 do not:
 
@@ -91,7 +130,7 @@ Rather than guess an order, this project ran two **independent, exhaustive** pip
 
 ## Approach 1: Exhaustive feature search → Logistic Regression
 
-**[`logistic_regression_pipeline.ipynb`](logistic_regression_pipeline.ipynb)** resolves the ordering problem by brute force: it checks **every possible combination of features** before ever picking an algorithm.
+**[`false_negative_rate.ipynb`](false_negative_rate.ipynb)** resolves the ordering problem by brute force: it checks **every possible combination of features** before ever picking an algorithm.
 
 1. **Feature search.** Every non-empty subset of the 7 candidate features was tried — 2⁷ − 1 = **127 combinations** — each scored with a neutral, fixed Logistic Regression so the feature search wouldn't be quietly biased toward whichever algorithm came next. Every combination was filtered to keep only those with a false-negative rate at or below 20% *before* ranking by accuracy — false negatives were never allowed to be traded away for a better headline number. Only 8 of 127 combinations survived that filter. The winner: **CSF Amyloid + CSF Phosphorylated tau**, a simpler pair than initially expected.
 2. **Algorithm search.** That winning pair of features was then run through seven candidate algorithms (Logistic Regression, Random Forest, SVM, Gradient Boosting, KNN, LDA, Naive Bayes), with the same false-negative filter applied first. Logistic Regression won — a genuinely tuned win this time, not the neutral placeholder from step 1.
@@ -185,7 +224,8 @@ The full personal reasoning behind these decisions — including the parts that 
 
 # References
 
-- Mayo Clinic: [Mayo Clinic scientists create tool to predict Alzheimer's risk years before symptoms begin](https://newsnetwork.mayoclinic.org/discussion/mayo-clinic-scientists-create-tool-to-predict-alzheimers-risk-years-before-symptoms-begin/)
-- Dataset: [Plasma lipidomics in Alzheimer's disease](https://www.kaggle.com/datasets/fereshtehjozaghkar/plasma-lipidomics-in-alzheimers-disease) (Kaggle)
-- Notebooks: [`main.ipynb`](main.ipynb) · [`logistic_regression_pipeline.ipynb`](logistic_regression_pipeline.ipynb) · [`svm_pipeline.ipynb`](svm_pipeline.ipynb) · [`decision_boundaries.ipynb`](decision_boundaries.ipynb)
-- Full project narrative: [`NARRATIVE.md`](NARRATIVE.md)
+1. 2025 Alzheimer's disease facts and figures. Alzheimers Dement. 2025 Apr 29;21(4):e70235. doi: 10.1002/alz.70235. PMCID: PMC12040760.
+1. Mayo Clinic: [Mayo Clinic scientists create tool to predict Alzheimer's risk years before symptoms begin](https://newsnetwork.mayoclinic.org/discussion/mayo-clinic-scientists-create-tool-to-predict-alzheimers-risk-years-before-symptoms-begin/)
+1. Alzheimer's Disease International, https://www.alzint.org/about/dementia-facts-figures/dementia-statistics/, 
+2. Dataset: [Plasma lipidomics in Alzheimer's disease](https://www.kaggle.com/datasets/fereshtehjozaghkar/plasma-lipidomics-in-alzheimers-disease) (Kaggle)
+
