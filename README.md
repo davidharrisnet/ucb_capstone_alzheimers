@@ -1,60 +1,18 @@
 
 # UCB Capstone Project
 U.C. Berkeley Engineering
+* Charles David Harris
+* davidharrisne@gmail.com
+
 ## Predicting Progression to Alzheimer's Disease from Blood Protein Levels
 
 ### Abstract
 
-"An estimated 7.2 million Americans age 65 and older live with Alzheimer's dementia today. This number could grow to 13.8 million by 2060, barring the development of medical breakthroughs to prevent or cure AD"[1]. "There are over 55 million people worldwide living with dementia in 2020. This number will almost double every 20 years, reaching 78 million in 2030 and 139 million in 2050.[2] "Accumulation of the protein beta‐amyloid outside neurons and twisted strands of the protein tau inside neurons are hallmarks. They are accompanied by the death of neurons and damage to brain tissue. Inflammation and atrophy of brain tissue are other changes."[3] 
-[Mayo Clinic](https://newsnetwork.mayoclinic.org/discussion/mayo-clinic-scientists-create-tool-to-predict-alzheimers-risk-years-before-symptoms-begin/) researchers have shown that two proteins in spinal fluid — amyloid and tau — can point toward who is at risk of developing Alzheimer's, years before symptoms appear.[4] 
 
-This project asks the question: **Among patients with with Mild Cognitive Impairment (MCI), can we predict who will progress to Alzheimer's, using Tau and Amyloid blood/CSF protein levels?**
-
-
-This project uses the Kaggle dataset [Plasma lipidomics in Alzheimer's disease](https://www.kaggle.com/datasets/fereshtehjozaghkar/plasma-lipidomics-in-alzheimers-disease) — real patient measurements for 212 people, of whom 89 have a known MCI-to-Alzheimer's outcome. That is a small dataset for an epidemic-scale question, and that mismatch means that the decisions in this project were made with caution.
-
-#### The Accuracy Trap
-
-In a clinical setting, accuracy comes with risk. A model can post a high accuracy number while failing to identity patients who progress to alzhiemers - the False Negative diagnosis.
-Acuracy must be balanced with precision, recall, F2, and AUC. 
---quote
-
-**In medical screening for a fatal disease, relying only on a general "False Negative Score" or a standard F1 score is not good enough because they treat false negatives and false positives with equal weight.When a disease is fatal, a False Negative means a sick patient is sent home untreated, which can lead to death. A False Positive means a healthy person gets extra tests, causing temporary anxiety but saving lives overall. Therefore, you must use metrics that specifically isolate and minimize false negatives.
-
-The \(F_{\beta }\) Score (with β = 2): The standard F1 score weights precision and recall equally. An F₂ score adjusts the math to place twice as much importance on recall (minimizing false negatives) as it does on precision.ROC-AUC Score: This measures how well your model separates the sick population from the healthy population across all possible decision thresholds, helping you safely pick a threshold that eliminates false negatives.**
-
-quote 
-"
-If you artificially balanced only the test set (e.g., undersampled negatives to evaluate), your ROC-AUC there won't reflect real-world deployment performance, since in production the disease is presumably still rare. A model can look great on a balanced test set and underperform in deployment because the operating point (threshold) that worked in balanced conditions doesn't map cleanly onto a population where positives are 1% instead of 50%.
-"
-
-
-Precision answers: of everyone the model flagged as "will progress to AD," how many actually did?
-
-$$\text{precision} = \frac{\text{true positives}}{\text{true positives} + \text{false positives}} = \frac{\text{correct positive predictions}}{\text{all positive predictions}}$$
-
-Recall answers: of everyone who actually progressed to Alzheimer's, how many did the model catch?
-
-$$\text{recall} = \frac{\text{true positives}}{\text{true positives} + \text{false negatives}} = \frac{\text{correct positive predictions}}{\text{all actual positives}}$$
-
-
-F2 answers: weighing precision and recall together, but caring more about recall — how well did the model do overall?
-
-$$F_2 = 5 \times \frac{\text{precision} \times \text{recall}}{4 \times \text{precision} + \text{recall}}$$
-
-This is the score actually used to pick hyperparameters throughout this project, instead of accuracy — the 5/4 weighting bakes the clinical priority ("don't miss progressors") directly into the number. Sweeping every possible decision threshold shows the full precision/recall trade-off F2 is trying to summarize in one number:
-
-<img src="images/ensemble_precision_recall.png" alt="Ensemble precision-recall curve" width="480">
-
-AUC (area under the ROC curve) answers: how well can the model tell a progressor from a non-progressor, before you even pick a decision cutoff?
-
-$$\text{AUC} \in [0.5,\ 1.0]$$
-
-0.5 is a coin flip; 1.0 is perfect separation. Unlike the other three metrics, AUC doesn't depend on where the "will progress / won't progress" line gets drawn — it's a check on whether the underlying signal is real at all, before accuracy, precision, or recall (which all depend on that threshold) enter the conversation:
-
-<img src="images/ensemble_roc.png" alt="Ensemble ROC curve" width="480">
-
-No single metric tells the whole story on its own; accuracy alone hides exactly the failure mode that matters most here.
+# TODO
+* Abstract of this project
+  * Two approaches
+---
 
 #### Two approaches
 Given the sensitiviy to false negatives, two approaches were taken
@@ -76,11 +34,17 @@ This report follows the CRISP-DM methodology:
 6. [Conclusion](#conclusion)
 7. [References](#references)
 
+
+# 1. Business Understanding
+## Clinical Background
+
+# TODO 
+* Paint the picture of Alzhiemers
+  * Define It
+  * Scope
+  * Symptoms
+  * protei and Tau, amyloid
 ---
-
-# Business Understanding
-### Clinical Background
-
 Alzheimer's disease is marked by two key proteins in the brain: **amyloid**, which forms plaques, and **tau**, which forms tangles. Drugs recently approved by the FDA remove amyloid from the brain and can slow disease progression in people with MCI or mild dementia — which makes early, accurate identification of at-risk patients clinically valuable, not just academically interesting.
 
 > "What's exciting now is that we're looking even earlier — before symptoms begin — to see if we can predict who might be at greatest risk of developing cognitive problems in the future."
@@ -88,19 +52,113 @@ Alzheimer's disease is marked by two key proteins in the brain: **amyloid**, whi
 
 The Mayo Clinic's own prediction model combined age, sex, APOE genotype, and brain amyloid levels from PET scans. Of all the predictors they evaluated, amyloid levels had the single largest effect on lifetime risk of both MCI and dementia — which is why this project starts from the hypothesis that amyloid and tau levels, on their own, should carry real signal.
 
+
+Worlwide, there are greater than 55 million living with Alzheimer's Disease, and baring medicl breakthroughs this number will double evey 20 years. Alzhiemrs Disease has many symptoms 
+
+ "Accumulation of the protein beta‐amyloid outside neurons and twisted strands of the protein tau inside neurons are hallmarks. They are accompanied by the death of neurons and damage to brain tissue. Inflammation and atrophy of brain tissue are other changes."[3] 
+[Mayo Clinic](https://newsnetwork.mayoclinic.org/discussion/mayo-clinic-scientists-create-tool-to-predict-alzheimers-risk-years-before-symptoms-begin/) researchers have shown that two proteins in spinal fluid — amyloid and tau — can point toward who is at risk of developing Alzheimer's, years before symptoms appear.[4] 
+
+This project asks the question: **Among patients with with Mild Cognitive Impairment (MCI), can we predict who will progress to Alzheimer's, using Tau and Amyloid blood/CSF protein levels?**
+
+
+This project uses the Kaggle dataset [Plasma lipidomics in Alzheimer's disease](https://www.kaggle.com/datasets/fereshtehjozaghkar/plasma-lipidomics-in-alzheimers-disease) — real patient measurements for 212 people, of whom 89 have a known MCI-to-Alzheimer's outcome. That is a small dataset for an epidemic-scale question, and that mismatch means that the decisions in this project were made with caution.
+
+#### The Accuracy Trap
+# TODO
+* Discuss metrics
+  * Precision
+  * Recall
+  * roc_auc   --- balance vs unbalanced
+* Present strategy of analysis.
+* fix the quotes
+* make sure the charts match what you actually did
+* Are we using F2 or recall, rox_uac?
+* make a decision and stic to it
+
+---
+In a clinical setting, accuracy comes with risk. A model can post a high accuracy number while failing to identity patients who progress to alzhiemers - the False Negative diagnosis.
+Acuracy must be balanced with precision, recall, F2, and AUC. 
+--quote
+
 **The business question this project answers:** given a patient already diagnosed with Mild Cognitive Impairment, can their CSF protein levels tell us whether they are likely to progress to Alzheimer's — early enough that a clinician could act on it?
 
 **Why false negatives matter more than false positives here:** a model that says "this patient won't progress" when they actually will is a patient who doesn't get monitored or treated early. That asymmetry — missing a progressor is worse than a false alarm — shapes every modeling decision in this report, not just the final headline metric.
 
-# Data Understanding
 
+
+
+**In medical screening for a fatal disease, relying only on a general "False Negative Score" or a standard F1 score is not good enough because they treat false negatives and false positives with equal weight.When a disease is fatal, a False Negative means a sick patient is sent home untreated, which can lead to death. A False Positive means a healthy person gets extra tests, causing temporary anxiety but saving lives overall. Therefore, you must use metrics that specifically isolate and minimize false negatives.
+
+The \(F_{\beta }\) Score (with β = 2): The standard F1 score weights precision and recall equally. An F₂ score adjusts the math to place twice as much importance on recall (minimizing false negatives) as it does on precision.ROC-AUC Score: This measures how well your model separates the sick population from the healthy population across all possible decision thresholds, helping you safely pick a threshold that eliminates false negatives.**
+
+quote 
+"
+If you artificially balanced only the test set (e.g., undersampled negatives to evaluate), your ROC-AUC there won't reflect real-world deployment performance, since in production the disease is presumably still rare. A model can look great on a balanced test set and underperform in deployment because the operating point (threshold) that worked in balanced conditions doesn't map cleanly onto a population where positives are 1% instead of 50%.
+"
+### Reading a confusion matrix
+
+Every prediction a model makes lands in one of four boxes, depending on what actually happened to the patient versus what the model guessed:
+
+<img src="images/confusion_matrix_explainer.png" alt="Confusion matrix explainer diagram" width="380">
+
+The box that matters most clinically is the **False Negative**: a patient who is actually heading toward Alzheimer's, but the model tells them — and their doctor — not to worry. Every metric below is really just a different way of watching that one box.
+
+**Accuracy** — overall, how often was the model right?
+
+$$\text{accuracy} = \frac{\text{true positives} + \text{true negatives}}{\text{everyone}}$$
+
+Misleading on its own here, because it treats a missed progressor and a false alarm as equally bad — it can't tell them apart.
+
+**Precision** — of everyone the model flagged as "will progress," how many actually did?
+
+$$\text{precision} = \frac{\text{true positives}}{\text{true positives} + \text{false positives}}$$
+
+Precision answers: of everyone the model flagged as "will progress to AD," how many actually did?
+
+$$\text{precision} = \frac{\text{true positives}}{\text{true positives} + \text{false positives}} = \frac{\text{correct positive predictions}}{\text{all positive predictions}}$$
+
+Recall answers: of everyone who actually progressed to Alzheimer's, how many did the model catch?
+
+$$\text{recall} = \frac{\text{true positives}}{\text{true positives} + \text{false negatives}} = \frac{\text{correct positive predictions}}{\text{all actual positives}}$$
+
+
+F2 answers: weighing precision and recall together, but caring more about recall — how well did the model do overall?
+
+$$F_2 = 5 \times \frac{\text{precision} \times \text{recall}}{4 \times \text{precision} + \text{recall}}$$
+
+This is the score actually used to pick hyperparameters throughout this project, instead of accuracy — the 5/4 weighting bakes the clinical priority ("don't miss progressors") directly into the number. Sweeping every possible decision threshold shows the full precision/recall trade-off F2 is trying to summarize in one number:
+
+<img src="images/ensemble_precision_recall.png" alt="Ensemble precision-recall curve" width="380">
+
+AUC (area under the ROC curve) answers: how well can the model tell a progressor from a non-progressor, before you even pick a decision cutoff?
+
+$$\text{AUC} \in [0.5,\ 1.0]$$
+
+0.5 is a coin flip; 1.0 is perfect separation. Unlike the other three metrics, AUC doesn't depend on where the "will progress / won't progress" line gets drawn — it's a check on whether the underlying signal is real at all, before accuracy, precision, or recall (which all depend on that threshold) enter the conversation:
+
+<img src="images/ensemble_roc.png" alt="Ensemble ROC curve" width="480">
+
+No single metric tells the whole story on its own; accuracy alone hides exactly the failure mode that matters most here.
+
+
+# 2. Data Understanding
+# TODO
+* Bring in the information from lipodomics
+* We only have 88 customers
+* This is a problem -- access to large scale clinical data not accessible
+* Proceed with caution
+* Acadamic excercise
+
+---
 The dataset contains 212 patients across three diagnostic categories:
 
-![Diagnostic counts](images/Diagnostic.png width="500")
+
+<img src="images/Diagnostic.png" alt="Diagnostic counts" width="480">
 
 Only the 89 patients already diagnosed with Mild Cognitive Impairment have a known "Progression to Alzheimer's Disease" outcome — nobody who is already healthy or already has an AD diagnosis has a progression label, because the question doesn't apply to them. So the real question this project answers is narrower than "who gets Alzheimer's": **of patients already showing MCI, who is going to get worse?** 47 of the 89 progress to Alzheimer's, 42 do not:
 
-![Mild Cognitive Impairment progression counts](images/Mild_Cognitive_Impairment_.png)
+
+<img src="images/Mild_Cognitive_Impairment_.png" alt="Mild Cognitive Impairment progression counts" width="480">
 
 **Concerns**: 89 labeled patients is a small dataset. Small samples are sensitive to exactly which patients land in a given train/test split or cross-validation fold, so results throughout this report should be read as suggestive, not definitive.
 
@@ -112,28 +170,13 @@ Before any modeling, it's worth checking visually whether the two biomarkers the
 
 <img src="images/decision_boundary.png" alt="Decision boundary between progression and no progression, tau vs. amyloid" width="500">
 
-Fitting Logistic Regression directly on these two biomarkers (scaled, using the same tuned hyperparameters the final model below lands on) draws a boundary that leans the way the biology predicts: patients with high tau need correspondingly high amyloid to land on the "no progression" side. The two classes overlap substantially rather than separating cleanly — expected, given how small and noisy this dataset is — but the overall lean of the boundary matches the clinical hypothesis, which is a reasonable sanity check before building anything more sophisticated. (See [`decision_boundaries.ipynb`](decision_boundaries.ipynb).)
 
-As a second, more rigorous check, a single-feature Logistic Regression was fit on each candidate predictor individually, to see which ones carry statistically significant signal in this dataset before using any of them in a real model:
 
-```
-Feature(s)   AUC  p-value Significant (p<0.05)
-                Age 0.550   0.3656                   No
-                Sex 0.524   0.5195                   No
-               MMSE 0.640   0.0360                  Yes
-              APOE4 0.727   0.0010                  Yes
-        CSF Amyloid 0.782   0.0010                  Yes
-      CSF Total tau 0.728   0.0010                  Yes
-Amyloid + Total tau 0.810   0.0010                  Yes
-```
-
-Age and Sex wash out — no real signal. Amyloid, Total tau, and APOE4 all clear the p < 0.05 bar, which is reassuring: it means this small, noisy dataset is able to reproduce a known clinical relationship before being asked to do anything harder.
-
-# Data Preparation
+# 3. Data Preparation
 
 Some MCI patients had missing values for individual biomarkers. Missing numeric values (Age, MMSE, CSF Amyloid, CSF Total tau, CSF Phosphorylated tau) were filled with that column's **median**; the one missing categorical value (APOE4 carrier status) was filled with that column's **mode** (most common value). Sex and APOE4 were converted from Yes/No text to 0/1. No rows were dropped and no class-balancing was applied — see "Class balance" above.
 
-# Modeling
+# 4. Modeling
 
 With the biology sanity-checked, the next question was purely methodological: given 7 candidate features, which should the model actually use, which classification algorithm should it be, and what hyperparameters should that algorithm have? These three decisions are tangled together — the best features depend on which algorithm you're picking them for, and the best hyperparameters depend on which features and algorithm you've already chosen. There's no obviously safe order to make them in.
 
@@ -161,82 +204,20 @@ These two pipelines land on genuinely different answers — a 2-feature Logistic
 
 Rather than pick a single "true" winner, `main.ipynb` deploys **both** models and averages their predicted probabilities as a simple two-model ensemble — treated here as one more honest data point, not a way to paper over the disagreement.
 
-# Evaluation
+# 5. Evaluation
 
-### Reading a confusion matrix
 
-Every prediction a model makes lands in one of four boxes, depending on what actually happened to the patient versus what the model guessed:
 
-<img src="images/confusion_matrix_explainer.png" alt="Confusion matrix explainer diagram" width="500">
+# 6. Conclusion
 
-The box that matters most clinically is the **False Negative**: a patient who is actually heading toward Alzheimer's, but the model tells them — and their doctor — not to worry. Every metric below is really just a different way of watching that one box.
 
-**Accuracy** — overall, how often was the model right?
 
-$$\text{accuracy} = \frac{\text{true positives} + \text{true negatives}}{\text{everyone}}$$
-
-Misleading on its own here, because it treats a missed progressor and a false alarm as equally bad — it can't tell them apart.
-
-**Precision** — of everyone the model flagged as "will progress," how many actually did?
-
-$$\text{precision} = \frac{\text{true positives}}{\text{true positives} + \text{false positives}}$$
-
-**Recall** (sensitivity) — of everyone who actually progressed, how many did the model catch?
-
-$$\text{recall} = \frac{\text{true positives}}{\text{true positives} + \text{false negatives}}$$
-
-This one speaks directly to the False Negative box — it drops every time the model misses a real progressor.
-
-**F2 score** — precision and recall combined into one number, weighted so recall (catching progressors) matters more:
-
-$$F_2 = 5 \times \frac{\text{precision} \times \text{recall}}{4 \times \text{precision} + \text{recall}}$$
-
-This is the score actually used to pick hyperparameters throughout this project, instead of accuracy — it bakes "don't miss progressors" directly into the number.
-
-**AUC** (area under the ROC curve) — how well can the model tell a progressor from a non-progressor, before you even pick a decision cutoff?
-
-$$\text{AUC} \in [0.5,\ 1.0]$$
-
-0.5 is a coin flip; 1.0 is perfect separation. Unlike the other four, AUC doesn't depend on where the "will progress / won't progress" line gets drawn — it's a check on whether the underlying signal is real at all.
-
-### Final results, side by side
-
-Both models were evaluated on the same 18-patient holdout (10 actual progressors, 8 non-progressors) — data neither model was fit on:
-
-![Holdout confusion matrices for Logistic Regression, SVM, and the Ensemble](images/confusion_matrices_results.png)
-
-| Model | Accuracy | Precision | AUC | False Negatives | False Negative Rate |
-|---|---|---|---|---|---|
-| Logistic Regression | 77.8% | 0.80 | 0.85 | 2 of 10 | 20% |
-| SVM (RBF) | 72.2% | 0.67 | 0.73 | **0 of 10** | **0%** |
-| Ensemble (average) | 77.8% | 0.80 | 0.84 | 2 of 10 | 20% |
-
-A genuinely striking result: on this holdout, the SVM model catches **every single actual progressor** — zero false negatives — but pays for it with 5 false alarms out of 8 non-progressors, which is why its accuracy and precision look worse. Whether that trade is worth it depends entirely on how expensive a false alarm is versus a missed diagnosis — a judgment call for clinicians, not something a metric can settle on its own.
-
-The simple 0.5-threshold ensemble average, in this case, doesn't clearly beat Logistic Regression alone — it lands on identical accuracy, precision, and false-negative count. Its ranking quality (AUC) is close to the average of the two, which is the honest, unglamorous result of averaging: the ensemble is only as good as its ability to blend two disagreeing models, and a fixed 0.5 cutoff doesn't automatically find the best trade-off.
-
-### Precision, recall, and the cost of chasing zero false negatives
-
-Rather than pick one decision threshold and stop, the ensemble's predicted probabilities were swept across every possible threshold to see the full trade-off curve:
-
-<img src="images/ensemble_precision_recall.png" alt="Ensemble precision-recall curve" width="480"> <img src="images/ensemble_roc.png" alt="Ensemble ROC curve" width="480">
-
-Two things stand out. First, the ensemble's most confident predictions are trustworthy — its top few "will progress" calls are correct essentially every time. Second, precision falls as recall is pushed toward 1.0: catching every last progressor means accepting a meaningfully higher false-alarm rate. That's not a flaw in the model — it's the same real trade-off the SVM result above demonstrates directly, just shown as a continuous curve instead of one point.
-
-### Sitting with the false negatives
-
-The recurring discomfort throughout this project was false negatives: a patient the model tells "you're not progressing" who actually is. That's not an abstract number — it's a person who doesn't get monitored or treated early. That discomfort is the entire reason every search in this project filtered on false-negative rate *before* ever looking at accuracy, and why F2 — not accuracy, not plain AUC — is the scoring function that picked every final hyperparameter. A 77.8%-accuracy, 2-missed-progressor result is not perfect, but it's a deliberate, defensible trade-off rather than an accident of whichever metric happened to be optimized.
-
-# Conclusion
-
-89 labeled patients is not a lot, for a disease that affects millions. Every methodological choice in this project — stratified folds instead of a single split, exhaustive rather than greedy feature search, filtering on false-negative rate before optimizing anything else, comparing two independent pipelines instead of trusting the first answer — was a hedge against overfitting to a small, noisy sample. Both final models are saved and reproducible (`alzheimers_progression_model.joblib`, `svm_progression_model.joblib`), but neither should be read as deployment-ready without a larger, external validation cohort. The real finding of this project isn't a single number — it's that two honest, careful pipelines can disagree on the "best" model while agreeing on the underlying biology, and that disagreement is itself useful information for anyone deciding how much to trust either one.
-
-The full personal reasoning behind these decisions — including the parts that didn't work and the discomfort with false negatives that shaped nearly every choice — is written up in [`NARRATIVE.md`](NARRATIVE.md).
 
 # References
 
 1. 2025 Alzheimer's disease facts and figures. Alzheimers Dement. 2025 Apr 29;21(4):e70235. doi: 10.1002/alz.70235. PMCID: PMC12040760.
 1. Mayo Clinic: [Mayo Clinic scientists create tool to predict Alzheimer's risk years before symptoms begin](https://newsnetwork.mayoclinic.org/discussion/mayo-clinic-scientists-create-tool-to-predict-alzheimers-risk-years-before-symptoms-begin/)
+1. Decision Boundaries [Analysis](decision_boundaries.ipynb)
 1. Alzheimer's Disease International, https://www.alzint.org/about/dementia-facts-figures/dementia-statistics/, 
 2. Dataset: [Plasma lipidomics in Alzheimer's disease](https://www.kaggle.com/datasets/fereshtehjozaghkar/plasma-lipidomics-in-alzheimers-disease) (Kaggle)
 
