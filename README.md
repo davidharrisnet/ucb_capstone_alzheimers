@@ -17,6 +17,17 @@ This project uses the Kaggle dataset [Plasma lipidomics in Alzheimer's disease](
 
 In a clinical setting, accuracy comes with risk. A model can post a high accuracy number while failing to identity patients who progress to alzhiemers - the False Negative diagnosis.
 Acuracy must be balanced with precision, recall, F2, and AUC. 
+--quote
+
+**In medical screening for a fatal disease, relying only on a general "False Negative Score" or a standard F1 score is not good enough because they treat false negatives and false positives with equal weight.When a disease is fatal, a False Negative means a sick patient is sent home untreated, which can lead to death. A False Positive means a healthy person gets extra tests, causing temporary anxiety but saving lives overall. Therefore, you must use metrics that specifically isolate and minimize false negatives.
+
+The \(F_{\beta }\) Score (with β = 2): The standard F1 score weights precision and recall equally. An F₂ score adjusts the math to place twice as much importance on recall (minimizing false negatives) as it does on precision.ROC-AUC Score: This measures how well your model separates the sick population from the healthy population across all possible decision thresholds, helping you safely pick a threshold that eliminates false negatives.**
+
+quote 
+"
+If you artificially balanced only the test set (e.g., undersampled negatives to evaluate), your ROC-AUC there won't reflect real-world deployment performance, since in production the disease is presumably still rare. A model can look great on a balanced test set and underperform in deployment because the operating point (threshold) that worked in balanced conditions doesn't map cleanly onto a population where positives are 1% instead of 50%.
+"
+
 
 Precision answers: of everyone the model flagged as "will progress to AD," how many actually did?
 
