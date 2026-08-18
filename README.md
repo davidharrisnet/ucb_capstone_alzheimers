@@ -162,7 +162,16 @@ Only the 89 patients already diagnosed with Mild Cognitive Impairment have a kno
 
 **Concerns**: 89 labeled patients is a small dataset. Small samples are sensitive to exactly which patients land in a given train/test split or cross-validation fold, so results throughout this report should be read as suggestive, not definitive.
 
+
 **Class balance**: at 53% Yes / 47% No, the MCI subset is close enough to balanced that this study does not apply any class-balancing technique (e.g. oversampling, class weighting) to the training data.
+
+
+**Parameter Choice**
+<img src="images/pair_plot.png" alt="Pair Plot" width="500">
+# 3. Data Preparation
+
+
+
 
 ### Setting expectations for the biology
 
@@ -171,8 +180,6 @@ Before any modeling, it's worth checking visually whether the two biomarkers the
 <img src="images/decision_boundary.png" alt="Decision boundary between progression and no progression, tau vs. amyloid" width="500">
 
 
-<img src="images/pair_plot.png" alt="Pair Plot" width="500">
-# 3. Data Preparation
 
 Some MCI patients had missing values for individual biomarkers. Missing numeric values (Age, MMSE, CSF Amyloid, CSF Total tau, CSF Phosphorylated tau) were filled with that column's **median**; the one missing categorical value (APOE4 carrier status) was filled with that column's **mode** (most common value). Sex and APOE4 were converted from Yes/No text to 0/1. No rows were dropped and no class-balancing was applied — see "Class balance" above.
 
