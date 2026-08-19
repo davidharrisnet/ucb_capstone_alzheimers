@@ -89,8 +89,6 @@ Two biomarkers CSF amyloid and CSF phosphorylated tau — actually separate prog
 <a id="data-preparation"></a>
 ## 4. Data Preprocessing/Preparation
 
-<a id="data_understanding"></a>
-#### Data Understanding (CRISPR)
 
 Preprocessing cleaning
 
@@ -168,11 +166,8 @@ Only the 89 patients already diagnosed with Mild Cognitive Impairment have a kno
 This test was approached from two approaches:
  1. Parameter First
 
- An exhaustive parameter evaluation using LogisticRegression confirmed that 'CSF Amyloid (pg/mL)', 'CSF Phosphorylated tau (pg/mL)' are the best features. The best hyperparameters were derived from GridSearchCV, which resulted in a model of 
+ An exhaustive parameter evaluation using LogisticRegression confirmed that 'CSF Amyloid (pg/mL)', 'CSF Phosphorylated tau (pg/mL)' are the best features. The best hyperparameters were then derived from GridSearchCV.
  
-
-
-
 
 2. Classification First 
 
@@ -204,7 +199,7 @@ Pipeline([('sc', StandardScaler()), ('clf', LogisticRegression(max_iter=1000))])
 |--|--|--|--|--|--|--|
 |0.78|0.80|0.85|0.8000|0.8000| 2 | 0.2|
 
-NOTE: The test size was only 18 samples, so the FNR is based on 10 Yes's that were 2 predicted to be False. This test needs more data to explore these parameters more fully.
+NOTE: The test size was only 18 samples, so the FNR is based on 10 Yes's that were 2 predicted to be False. The false negative rate actually increased 0.03 to 0.2 in the hyperpareterized model. This test needs more data to explore these parameters more fully.
 
 #### [KNearestNeighbors](knearest_neighbors_pipeline.ipynb)
 
