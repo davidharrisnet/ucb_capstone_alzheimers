@@ -1,3 +1,14 @@
+"""
+
+Clearly states business understanding of the problem
+· Clean and organized notebook with data cleaning
+· Correct and concise interpretation of descriptive and inferential statistics
+· Clearly states findings in their own sections, with actionable items highlighted in appropriate language for a nontechnical audience
+· Next steps and recommendations
+
+"""
+
+
 
 # U.C. Berkeley Engineering Capstone Project
 ## Predicting Progression to Alzheimer's Disease from Blood Protein Levels
