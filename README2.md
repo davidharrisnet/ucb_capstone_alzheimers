@@ -14,27 +14,26 @@
 
 ### Alzhiemer's Disease Epidemic
 
-Worlwide, there are greater than 55 million living with Alzheimer's Disease, and baring medical breakthroughs this number will double every 20 years[1]. Within medical research there is a consensus that "Accumulation of the protein beta‐amyloid outside neurons and twisted strands of the protein tau inside neurons are hallmarks. They are accompanied by the death of neurons and damage to brain tissue. Inflammation and atrophy of brain tissue are other changes[2]." There is excitement and active research of identifying signs of alzhiemer's before it is manifest, and finding ways to treat the brain's amylid plaques and tau tangles.
+Worlwide, there are greater than 55 million living with Alzheimer's Disease , and baring medical breakthroughs, this number will double every 20 years[1]. Alzhiem's Disease is characterized by neuron death and brain tissue damage leading to irriversable dementia. Within medical research there is a consensus that two protiens found in the brain: **amyloid** and **tau** are predictors of developing alzhiemers in the future. There is excitement and active research to find ways to treat the brain's amylid plaques and tau tangles before the onset of Azheimer's.
 
 <a id="business-understanding"></a>
 ##### Business Understanding
-This project explored a Kaggle dataset to test the hypothesis that Amyloid and Tau protein levels are predictive of someone developing alzhiemers in the future. Medical diagnosis are concerned for false negatives, so these models were evaluated by Recall, and ROC_UAC This project asks the question: Among patients with with Mild Cognitive Impairment (MCI), can we predict who will progress to Alzheimer's, using Tau and Amyloid blood/CSF protein levels?
+This project explored a Kaggle dataset to test the hypothesis that Amyloid and Tau protein levels are predictive of developing alzhiemers in the future. 
 
+A **challenge** of medical diagnosis is the concerned for false negatives. Accuracy can be misleading because it treats incorrectly diagnosing someone with Alzheimers the same as it does missing a diagnosis. This study used the F2 metric, which is described in [Reading a Confusion Matrix](#confusion)
 
-This project explored a Kaggle dataset to test the hypothesis that Amyloid and Tau protein levels are predictive of someone developing alzhiemers in the future. Medical diagnosis are concerned for false negatives, so these models were evaluated by Recall, and ROC_UAC 
-This project asks the question: **Among patients with with Mild Cognitive Impairment (MCI), can we predict who will progress to Alzheimer's, using Tau and Amyloid blood/CSF protein levels?**
-
-
+A second **challenge** for this project was acquiring real data. Real medical data is not readily accessible outside of licensed research facilities, so this effort used a small, but real, dataset for Kaggle
 
 ## 2 Model Outomes and Predicitions
 
-Supervised Classification problem degrees of dementia,but alzhiermls is a binary diagnosos Yes/No. 
+The Kaggle dataset identified "Progression to Alzeimers'" as a binary classification of Yes or No, so this study used a supervised classification approach to predict whether an individual will develop alzhiemer's based on a set of parameters. In the study two approaches were taken, in the first the most important parameters were derived, in the second an attempt to derive the best classificaion model using all avaiable parameters. See [modeling](#modeling)
 
-#### Clinical Metrics
+**Clinical Metrics**
 
 In a clinical setting, accuracy comes with risk. A model can post a high accuracy number while failing to identity patients who progress to alzhiemers - the false negative diagnosis. Likewise counting the false negative rate is insufficient because if ignores patients who are falsey diagnosed - false positive - and have to undergo the stress and financial burden of uneccassary treatment. 
 
 
+<a id="confusion"></a>
 ### Reading a confusion matrix
 
 Every prediction a model makes lands in one of four boxes, depending on what actually happened to the patient versus what the model guessed:
@@ -53,40 +52,40 @@ $$\text{recall} = \frac{\text{true positives}}{\text{true positives} + \text{fal
 
 This measure the ability of a model to catch all true positive cases, but ignores the cost of false positives. 
 
+
 **F2** answers: weighing precision and recall together, but caring more about recall. It has a focus on false negatives while penalizing mised diagnosis - false positives. 
 
 $$F_2 = 5 \times \frac{\text{precision} \times \text{recall}}{4 \times \text{precision} + \text{recall}}$$
 
 For this work, F2, was chosen as the metric to look for. F2 is a balance between precission and recall placing twice the weight of recall as precision. 
 
+This project asks the question: **Among patients with with Mild Cognitive Impairment (MCI), can we predict who will progress to Alzheimer's, using Tau and Amyloid blood/CSF protein levels?**
 
 ## 3. Data Aquisition
-
-## [Plama lipidomic in Alzheimer's diseasd](https://www.kaggle.com/datasets/fereshtehjozaghkar/plasma-lipidomics-in-alzheimers-disease)
-### Data Card
-### About Datset
-
-**Introduction**
-Alzheimer's disease (AD) is a progressive neurodegenerative disorder that affects humans. It is typically characterized by cognitive impairment, which affects speech, behavior, and visual orientation. As cognitive capabilities decline, daily activities become more challenging, disabilities are experienced, and death occurs. Alzheimer's disease (AD) is strongly associated with abnormal lipid metabolism.
-This dataset contains 213 plasma samples, including 20 controls, 89 samples from individuals with mild cognitive impairment, and 104 samples from individuals with Alzheimer's disease. Furthermore, the dataset includes information on age, sex, cognitive evaluation results, and cerebrospinal fluid biomarkers indicative of Alzheimer's disease.
+**Data Source**
+Data was acquired from Kaggle: [Plama lipidomic in Alzheimer's diseasd](https://www.kaggle.com/datasets/fereshtehjozaghkar/plasma-lipidomics-in-alzheimers-disease)
 
 **Authors**
 Gerard Piñol-Ripoll, Farida Dakterzada, Joaquim Sol, Mariona Jové, Reinald Pamplona
 
-**- Creative Commons License of the dataset:**
-Attribution-NonCommercial-NoDerivatives (BY-NC-ND)
-
 **- Dataset Digital Object Identifier (DOI):**
 https://doi.org/10.34810/data614
 
-**- Publications related to the dataset:**
-Dakterzada, F., Jové, M., Huerto, R., Carnes, A., Sol, J., Pamplona, R., & Piñol-Ripoll, G. (2023). Changes in Plasma Neutral and Ether-Linked Lipids Are Associated with The Pathology and Progression of Alzheimer’s Disease. Aging and Disease, 14(5), 1728.
-## Clinical Background
+
+
+**Concerns**: 89 labeled patients is a small dataset. Small samples are sensitive to exactly which patients land in a given train/test split or cross-validation fold, so results throughout this report should be read as suggestive, not definitive.
+
+<img src="images/Mild_Cognitive_Impairment_.png" alt="Mild Cognitive Impairment progression counts" width="380">
+
+**Class balance**: at 53% Yes / 47% No, the MCI subset is close enough to balanced that this study does not apply any class-balancing techniques.
+
+Given the limited data size the decision boundary looks promising.
+Two biomarkers CSF amyloid and CSF phosphorylated tau — actually separate progressors from non-progressors in this dataset, and in the expected direction (low amyloid, high tau → higher risk):
+
+<img src="images/decision_boundary.png" alt="Decision boundary between progression and no progression, tau vs. amyloid" width="500">
 
 
 
-
-#### 
 <a id="data-preparation"></a>
 ## 4. Data Preprocessing/Preparation
 
@@ -94,15 +93,12 @@ Dakterzada, F., Jové, M., Huerto, R., Carnes, A., Sol, J., Pamplona, R., & Piñ
 #### Data Understanding (CRISPR)
 
 Preprocessing cleaning
-#### Setting expectations for the biology
+
+Each of the juyter notebooks begin with the following steps.
 
 
-<a id="data-preparation"></a>
-# 3. Data Preparation
-Each of the juyter notebooks begin with the following code block.
-It is commented here to explain each step.
 
-Load data
+Load the data
 ```
 import pandas as pd
 df = pd.read_csv('data/plasma_lipidomics.csv')
@@ -114,8 +110,7 @@ mci = df[df["Progression to Alzheimer's Disease"].notna()].copy()
 
 Isolate the numeric columns
 ```
-numeric_cols = ['Age', 'MMSE', 'CSF Amyloid (pg/mL)', 'CSF Total tau (pg/mL)',
-                 'CSF Phosphorylated tau (pg/mL)']
+numeric_cols = ['Age', 'MMSE', 'CSF Amyloid (pg/mL)', 'CSF Total tau (pg/mL)','CSF Phosphorylated tau (pg/mL)']
 ```
 Fill nan values with the median value of the column
 ```
@@ -125,16 +120,18 @@ for col in numeric_cols:
 ```
 APOE4 is a "Yes" or "No" value
 Fill missing values with the most common value
-'''
+
+```
 mode_val = mci['APOE4'].mode()[0]
 mci['APOE4'] = mci['APOE4'].fillna(mode_val)
-'''
+```
 
 Convert categorical text columns to numeric (0/1)
 There were no nan values for Sex
+
 ```
-mci['Sex'] = (mci['Sex'] == 'Male').astype(int)           # Male=1, Female=0
-mci['APOE4'] = (mci['APOE4'] == 'Yes').astype(int)        # carries APOE4 allele=1, no=0
+mci['Sex'] = (mci['Sex'] == 'Male').astype(int)
+mci['APOE4'] = (mci['APOE4'] == 'Yes').astype(int)
 ```
 
 Set the Target
@@ -153,11 +150,11 @@ y = mci['Target']
 ### Target 
 For the Diagnostic column only patients with a 'Mild Cognigitive" profile have a value of "Yes" or "No" in the "Progression to Alzheimer's" colummn. This subset then comprised the rows for this study. 
 ```
-overlap_yes = df[(df['Diagnostic'] == 'Mild Cognitive Impairment') & (df["Progression to Alzheimer's Disease"] == 'Yes')]
-overlap_no  = df[(df['Diagnostic'] == 'Mild Cognitive Impairment') & (df["Progression to Alzheimer's Disease"] == 'No')]
+yes = df[(df['Diagnostic'] == 'Mild Cognitive Impairment') & (df["Progression to Alzheimer's Disease"] == 'Yes')]
+no  = df[(df['Diagnostic'] == 'Mild Cognitive Impairment') & (df["Progression to Alzheimer's Disease"] == 'No')]
 
-print("Non-MCI patients with Progression = Yes:", len(overlap_yes))
-print("Non-MCI patients with Progression = No:", len(overlap_no))
+print("Non-MCI patients with Progression = Yes:", len(yes))
+print("Non-MCI patients with Progression = No:", len(no))
 ```
 Non-MCI patients with Progression = Yes: 47
 
@@ -165,44 +162,90 @@ Non-MCI patients with Progression = No: 42
 
 Only the 89 patients already diagnosed with Mild Cognitive Impairment have a known "Progression to Alzheimer's Disease" So question for this project was **of patients already showing Mild Cognivite Impairment, who is going to develop alzhiemer's**
 
-<img src="images/Mild_Cognitive_Impairment_.png" alt="Mild Cognitive Impairment progression counts" width="380">
-
-**Concerns**: 89 labeled patients is a small dataset. Small samples are sensitive to exactly which patients land in a given train/test split or cross-validation fold, so results throughout this report should be read as suggestive, not definitive.
-
-
-**Class balance**: at 53% Yes / 47% No, the MCI subset is close enough to balanced that this study does not apply any class-balancing techniques.
-
 <a id="modeling"></a>
 ## 5. Modeling
-Before any modeling, it's worth checking visually whether the two biomarkers the Mayo Clinic hypothesis points to — CSF amyloid and CSF phosphorylated tau — actually separate progressors from non-progressors in this dataset, and in the expected direction (low amyloid, high tau → higher risk):
-
-<img src="images/decision_boundary.png" alt="Decision boundary between progression and no progression, tau vs. amyloid" width="500">
 
 This test was approached from two approaches:
+ 1. Parameter First
 
-## Approach 1: Exhaustive feature search → Logistic Regression
+ An exhaustive parameter evaluation using LogisticRegression confirmed that 'CSF Amyloid (pg/mL)', 'CSF Phosphorylated tau (pg/mL)' are the best features. The best hyperparameters were derived from GridSearchCV, which resulted in a model of 
+ 
 
 
 
 
+2. Classification First 
+
+A classifier first model where given all the parameters, the best classier as determined. The winner, 
+KNeighborsClassifier, was then hyperpareterized with GridSearchCV producing a model with these 
 
 
 <a id="model-evaluation"></a>
 ## 6. Model Evaluation
-Show the charts
+
+
+ #### [Logisticregression](logistic_regression_pipeline.ipynb) 
+
+### Parameter Pipeline
+
+ This notebook uses an exhaustive search to evalute parameters with StratifiedKFold, Logistic Regression.  Results were sorted by F2. The results with'CSF Amyloid (pg/mL)', 'CSF Phosphorylated tau (pg/mL)' showed an F2 and Recall of 0.80. Hypertuning using GridSearchCV produced the parameters LogisticRegression(C=10, class_weight=None, penalty='l2', max_iter=1000) which resulted in slightly higher Accuracy, and a stable Recall and F2 of 0.800. The False Negatives showed the most improvement from 8 to 2.
+```
+Pipeline([('sc', StandardScaler()), ('clf', LogisticRegression(max_iter=1000))])
+```
+|Accuracy|Precision| ROC_UAC | Recall | F2 |False Negatives | False Negative Rate|
+|--|--|--|--|--|--|--|
+|0.73|0.70|0.78| 0.82 |  0.80 | 0.80 | 0.17|
+
+```
+ Pipeline([('sc', StandardScaler()),('clf', LogisticRegression(C=10, class_weight=None, penalty='l2', max_iter=1000))])
+```
+
+|Accuracy|Precision| ROC_UAC | Recall | F2| False Negatives | False Negative Rate|
+|--|--|--|--|--|--|--|
+|0.78|0.80|0.85|0.8000|0.8000| 2 | 0.2|
+
+NOTE: The test size was only 18 samples, so the FNR is based on 10 Yes's that were 2 predicted to be False. This test needs more data to explore these parameters more fully.
 
 #### [KNearestNeighbors](knearest_neighbors_pipeline.ipynb)
 
-| Metric | Value |
-|---|---|
-| f2 | 0.8000 |
-| Recall | 0.7000 |
-| Accuracy | 0.6667 |
-| Precision | 0.7000 |
-| ROC AUC | 0.6125 |
-| False Negatives | 3 |
-| False Negative Rate | 0.3000 |
+|### Classificaiton Pipeline
 
+This notebook used a set of models with default parameters to derive the best classification algorithm given all the 
+parameters 	Age,MMSE,	CSF Amyloid (pg/mL),	CSF Total tau (pg/mL),	CSF Phosphorylated tau (pg/mL),	Sex,	APOE4
+
+```
+models = {
+    'Logistic Regression': Pipeline([('sc', StandardScaler()), ('clf', LogisticRegression(max_iter=1000))]),
+    'Random Forest':        RandomForestClassifier(n_estimators=300, random_state=42),
+    'SVM (RBF)':            Pipeline([('sc', StandardScaler()), ('clf', SVC(probability=True, random_state=42))]),
+    'Gradient Boosting':    GradientBoostingClassifier(random_state=42),
+    'K-Nearest Neighbors':  Pipeline([('sc', StandardScaler()), ('clf', KNeighborsClassifier())]),
+    'LDA':                  Pipeline([('sc', StandardScaler()), ('clf', LinearDiscriminantAnalysis())]),
+    'Naive Bayes':          Pipeline([('sc', StandardScaler()), ('clf', GaussianNB())]),
+}
+```
+
+Sorting by F2, preented KNeighborsClassifier as the top choice.
+
+```
+Pipeline([('sc', StandardScaler()), ('clf', KNeighborsClassifier())])
+```
+|Accuracy|Precision| ROC_UAC | Recall | F2 |False Negatives | False Negative Rate|
+|--|--|--|--|--|--|--|
+|0.77|0.80|0.75| 0.80 |  0.80 |2 | 0.2|
+
+Then GridSearchCV was used to derive the optimal paramters. 
+```
+Pipeline([
+    ('sc', StandardScaler()),
+    ('clf', KNeighborsClassifier(metric='euclidean', n_neighbors=9, weights='uniform'))
+])
+```
+In this case the scores were worse than with default parameters. This is a 50/50 coin toss.
+
+|Accuracy|Precision| ROC_UAC | Recall | F2| False Negatives | False Negative Rate|
+|--|--|--|--|--|--|--|
+|0.55|0.625|0.649|0.5|0.52| 5 | 0.5|
 
 
  LogisticRegression arose as the best model and was deployed for testing in  [Logisticregression](logistic_regression_pipeline.ipynb) 
@@ -212,8 +255,7 @@ Show the charts
 | High-risk profile | 368.2 | 119.2 |
 | Median profile | 604.0 | 63.5 |
 | Low-risk profile | 1062.0 | 37.1 |
-| Extreme AD-like | 257.0 | 512.0 |
-| Extreme low-risk | 1845.0 | 22.4 |
+| Extreme low-risk | 1845.0 | 22.4 | # Extreme low-risk (observed max amyloid + min p-tau)
 
 
 | Feature | Importance | Std |
