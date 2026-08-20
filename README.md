@@ -27,7 +27,7 @@ Within medical research there is a consensus that two protiens found in the brai
 ##### Business Understanding
 This project explored a Kaggle dataset to test the hypothesis that Amyloid and Tau protein levels are predictive of developing alzhiemers in the future. 
 
-A **challenge** of medical diagnosis is the concerned for false negatives. Accuracy can be misleading because it treats incorrectly diagnosing someone with Alzheimers the same as it does missing a diagnosis. This study used the F2 metric, which is described in [Reading a Confusion Matrix](#confusion)
+A **challenge** of medical diagnosis is the concerned for false negatives. Accuracy can be misleading because it treats incorrectly diagnosing someone with Alzheimers the same as it does missing a diagnosis. This study used the F2 metric, which is described in [Reading a Confusion Matrix](#reading-a-confusion-matrix)
 
 A second **challenge** for this project was acquiring real data. Real medical data is not readily accessible outside of licensed research facilities, so this effort used a small, but real, dataset for Kaggle
 
@@ -40,7 +40,6 @@ The Kaggle dataset identified "Progression to Alzeimers'" as a binary classifica
 In a clinical setting, accuracy comes with risk. A model can post a high accuracy number while failing to identity patients who progress to alzhiemers - the false negative diagnosis. Likewise counting the false negative rate is insufficient because if ignores patients who are falsey diagnosed - false positive - and have to undergo the stress and financial burden of uneccassary treatment. 
 
 
-<a id="confusion"></a>
 ### Reading a confusion matrix
 
 Every prediction a model makes lands in one of four boxes, depending on what actually happened to the patient versus what the model guessed:
