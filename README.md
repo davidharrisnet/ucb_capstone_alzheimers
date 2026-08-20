@@ -153,12 +153,14 @@ Separate for Training
 * stratefy to maintain the class balance
 * chose a test size of 0.2 given the small data set.
 * The provided train set of 71 and test set of 18
+  
 ```
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
-``
+```
 
 ### Target 
-For the Diagnostic column only patients with a 'Mild Cognigitive" profile have a value of "Yes" or "No" in the "Progression to Alzheimer's" colummn. This subset then comprised the rows for this study. 
+For the Diagnostic column only patients with a 'Mild Cognigitive" profile have a value of "Yes" or "No" in the "Progression to Alzheimer's" colummn. This subset then comprised the rows for this study.
+
 ```
 yes = df[(df['Diagnostic'] == 'Mild Cognitive Impairment') & (df["Progression to Alzheimer's Disease"] == 'Yes')]
 no  = df[(df['Diagnostic'] == 'Mild Cognitive Impairment') & (df["Progression to Alzheimer's Disease"] == 'No')]
@@ -166,8 +168,8 @@ no  = df[(df['Diagnostic'] == 'Mild Cognitive Impairment') & (df["Progression to
 print("Non-MCI patients with Progression = Yes:", len(yes))
 print("Non-MCI patients with Progression = No:", len(no))
 ```
-Non-MCI patients with Progression = Yes: 47
 
+Non-MCI patients with Progression = Yes: 47
 Non-MCI patients with Progression = No: 42
 
 Only the 89 patients already diagnosed with Mild Cognitive Impairment have a known "Progression to Alzheimer's Disease" So question for this project was **of patients already showing Mild Cognivite Impairment, who is going to develop alzhiemer's**
@@ -195,9 +197,11 @@ A classifier first model where given all the parameters, the best classier as de
 ### Parameter Pipeline
 
  This notebook uses an exhaustive search to evalute parameters with StratifiedKFold, Logistic Regression.  Results were sorted by F2. The results with'CSF Amyloid (pg/mL)', 'CSF Phosphorylated tau (pg/mL)' showed an F2 and Recall of 0.80. Hypertuning using GridSearchCV produced the parameters LogisticRegression(C=10, class_weight=None, penalty='l2', max_iter=1000) which resulted in slightly higher Accuracy, and a stable Recall and F2 of 0.800. The False Negatives showed the most improvement from 8 to 2.
+
 ```
 Pipeline([('sc', StandardScaler()), ('clf', LogisticRegression(max_iter=1000))])
 ```
+
 |Accuracy|Precision| ROC_UAC | Recall | F2 |False Negatives | False Negative Rate|
 |--|--|--|--|--|--|--|
 |0.73|0.70|0.78| 0.82 |  0.80 | 0.80 | 0.17|
@@ -236,17 +240,20 @@ Sorting by F2, preented KNeighborsClassifier as the top choice.
 ```
 Pipeline([('sc', StandardScaler()), ('clf', KNeighborsClassifier())])
 ```
+
 |Accuracy|Precision| ROC_UAC | Recall | F2 |False Negatives | False Negative Rate|
 |--|--|--|--|--|--|--|
 |0.77|0.80|0.75| 0.80 |  0.80 |2 | 0.2|
 
-Then GridSearchCV was used to derive the optimal paramters. 
+Then GridSearchCV was used to derive the optimal paramters.
+
 ```
 Pipeline([
     ('sc', StandardScaler()),
     ('clf', KNeighborsClassifier(metric='euclidean', n_neighbors=9, weights='uniform'))
 ])
 ```
+
 In this case the scores were worse than with default parameters. This is a 50/50 coin toss.
 
 |Accuracy|Precision| ROC_UAC | Recall | F2| False Negatives | False Negative Rate|
@@ -276,25 +283,7 @@ In this case the scores were worse than with default parameters. This is a 50/50
 
 [knearest_neighbors_pipeline](knearest_neighbors_pipeline.ipynb#coefficients)
 
-<a id="conclusion"></a>
-# 6. Conclusion
 
-This was as good excercise, but the data set was small. 
-In previous iterations of this project I read other datasets. In one it appeared that in a set of 22,000 (sythetically created) data, Age was the greatest indecator of alzeimers'. The narrow focus on developing alzeimers in the future is a worthwile endeafgor. 
-Recent studies exploring breathing carbon diocide reduction in Amyloid levels.  Imagine a cheap therapy breathing carbon dioxide.  A long wank in the park? Rr
-
-# Next Steps
-
-
-
-# Report Artifacts
-1. This README has a high level overview of the project. 
-2. [main.ipynb](main.ipynb) contain more granular work for **Business Understanding** and **Data Understanding** 
-3. [decison_boundaries](decision_boundaries.ipynb) contains exploartory charts for "Progression" and "No Progresion" 
-4. [logistic_regression_pipeling](logistic_regression_pipeline.ipynb) contains the work for the "Parameter First" approach
-5. [knearest_neighbors_pipelikne](knearest_neighbors_pipeline) has code for the "Classifiction First" approach
-
-<a id="references"></a>
 # References
 
 1. 2025 Alzheimer's disease facts and figures. Alzheimers Dement. 2025 Apr 29;21(4):e70235. doi: 10.1002/alz.70235. PMCID: PMC12040760.
