@@ -5,6 +5,11 @@
 <div align="center">
 
 ### Predicting Progression to Alzheimer's Disease from Blood Protein Levels
+
+<div align="center" font-size="10px;>
+
+ Charles David Harris  
+ davidharrisnet@gmail.com
 ---
 
 
@@ -14,7 +19,9 @@
 
 ### Alzhiemer's Disease Epidemic
 
-Worlwide, there are greater than 55 million living with Alzheimer's Disease , and baring medical breakthroughs, this number will double every 20 years[1]. Alzhiem's Disease is characterized by neuron death and brain tissue damage leading to irriversable dementia. Within medical research there is a consensus that two protiens found in the brain: **amyloid** and **tau** are predictors of developing alzhiemers in the future. There is excitement and active research to find ways to treat the brain's amylid plaques and tau tangles before the onset of Azheimer's.
+Worlwide, there are greater than 55 million persons living with Alzheimer's Disease ,and baring medical breakthroughs, this number will double every 20 years[1]. Alzhiem's Disease is is characterized by neuron death and brain tissue damage leading to brain shrinkage and irriversable dementia[1]. 
+
+Within medical research there is a consensus that two protiens found in the brain: **amyloid** and **tau** are predictors of developing alzhiemers in the future. There is excitement and active research to find ways to treat the brain's amylid plaques and tau tangles before the onset of Azheimer's[2].
 
 <a id="business-understanding"></a>
 ##### Business Understanding
@@ -94,8 +101,6 @@ Preprocessing cleaning
 
 Each of the juyter notebooks begin with the following steps.
 
-
-
 Load the data
 ```
 import pandas as pd
@@ -145,6 +150,14 @@ Set up the X and y values for model evaluation and traning for the rest of the e
 X = mci[feature_cols]
 y = mci['Target']
 ```
+Separate for Training
+* stratefy to maintain the class balance
+* chose a test size of 0.2 given the small data set.
+* The provided train set of 71 and test set of 18
+```
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
+``
+
 ### Target 
 For the Diagnostic column only patients with a 'Mild Cognigitive" profile have a value of "Yes" or "No" in the "Progression to Alzheimer's" colummn. This subset then comprised the rows for this study. 
 ```
@@ -164,15 +177,14 @@ Only the 89 patients already diagnosed with Mild Cognitive Impairment have a kno
 ## 5. Modeling
 
 This test was approached from two approaches:
- 1. Parameter First
+ 1. Parameter Pipeline
 
- An exhaustive parameter evaluation using LogisticRegression confirmed that 'CSF Amyloid (pg/mL)', 'CSF Phosphorylated tau (pg/mL)' are the best features. The best hyperparameters were then derived from GridSearchCV.
+ An exhaustive parameter evaluation using LogisticRegression confirmed that 'CSF Amyloid (pg/mL)', 'CSF Phosphorylated tau (pg/mL)' are the best features wiht an F2 score of 0.8. The best hyperparameters were then derived from GridSearchCV.
  
 
-2. Classification First 
+2. Classification Pipeline 
 
-A classifier first model where given all the parameters, the best classier as determined. The winner, 
-KNeighborsClassifier, was then hyperpareterized with GridSearchCV producing a model with these 
+A classifier first model where given all the parameters, the best classier as determined. The winner, KNeighborsClassifier, was then hyperpareterized with GridSearchCV.
 
 
 <a id="model-evaluation"></a>
@@ -203,7 +215,7 @@ NOTE: The test size was only 18 samples, so the FNR is based on 10 Yes's that we
 
 #### [KNearestNeighbors](knearest_neighbors_pipeline.ipynb)
 
-|### Classificaiton Pipeline
+### Classificaiton Pipeline
 
 This notebook used a set of models with default parameters to derive the best classification algorithm given all the 
 parameters 	Age,MMSE,	CSF Amyloid (pg/mL),	CSF Total tau (pg/mL),	CSF Phosphorylated tau (pg/mL),	Sex,	APOE4
