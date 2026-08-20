@@ -6,15 +6,10 @@
 
 ### Predicting Progression to Alzheimer's Disease from Blood Protein Levels
 
-<div align="center" font-size="10px;>
-
- Charles David Harris  
- davidharrisnet@gmail.com
----
-
+Charles David Harris
 
 <div align="left">
-
+ 
 ## 1. Problem Statement
 
 ### Alzhiemer's Disease Epidemic
